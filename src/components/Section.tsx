@@ -6,14 +6,17 @@ interface SectionProps {
   points: Record<string, number>;
   onPointChange: (statementId: string, value: number) => void;
   totalPoints: number;
+  language: 'en' | 'my';
 }
 
-const Section: React.FC<SectionProps> = ({ section, points, onPointChange, totalPoints }) => {
+const Section: React.FC<SectionProps> = ({ section, points, onPointChange, totalPoints, language }) => {
   return (
     <div className="bg-white p-8 rounded-2xl border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-2xl mx-auto transition-all duration-500">
-      <h2 className="text-3xl font-black mb-2 text-black tracking-tight font-header uppercase">{section.title}</h2>
+      <h2 className="text-3xl font-black mb-2 text-black tracking-tight font-header uppercase">
+        {language === 'my' ? section.burmeseTitle : section.title}
+      </h2>
       <p className="mb-10 text-gray-500 font-medium text-xs uppercase tracking-widest">
-        Allocation Protocol // 10 Units Total
+        {language === 'my' ? 'ရမှတ်ခွဲဝေမှု // စုစုပေါင်း ၁၀ မှတ်' : 'Allocation Protocol // 10 Units Total'}
       </p>
 
       <div className="space-y-12">
@@ -21,7 +24,7 @@ const Section: React.FC<SectionProps> = ({ section, points, onPointChange, total
           <div key={statement.id} className="group">
             <div className="flex justify-between items-start mb-4 gap-6">
               <p className="text-base font-medium text-black group-hover:text-gray-600 transition-colors leading-relaxed">
-                {statement.text}
+                {language === 'my' ? statement.burmeseText : statement.text}
               </p>
               <div className={`flex items-center justify-center w-12 h-12 rounded-lg border-2 font-black text-lg transition-all duration-300 ${
                 (points[statement.id] || 0) > 0 

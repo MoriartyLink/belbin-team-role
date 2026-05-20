@@ -9,6 +9,7 @@ function App() {
   const [view, setView] = useState<View>('intro');
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
+  const [language, setLanguage] = useState<'en' | 'my'>('en');
 
   const currentSection = ASSESSMENT_DATA[currentSectionIndex];
 
@@ -110,6 +111,14 @@ function App() {
         {view === 'assessment' && (
           <div>
             <div className="mb-10 flex flex-col items-center">
+              <div className="flex justify-between w-full mb-6">
+                <button
+                  onClick={() => setLanguage(language === 'en' ? 'my' : 'en')}
+                  className="bg-white border-2 border-black px-4 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
+                >
+                  {language === 'en' ? 'Translate to Burmese (မြန်မာ)' : 'Switch to English'}
+                </button>
+              </div>
               <div className="flex justify-between w-full mb-2 px-1 text-[10px] font-black uppercase tracking-[0.2em]">
                 <span>Section {currentSectionIndex + 1} / {ASSESSMENT_DATA.length}</span>
                 <span>{Math.round(((currentSectionIndex + 1) / ASSESSMENT_DATA.length) * 100)}%</span>
@@ -131,6 +140,7 @@ function App() {
               points={scores}
               onPointChange={handlePointChange}
               totalPoints={sectionTotal}
+              language={language}
             />
 
             <div className="mt-10 flex justify-between items-center px-2">
