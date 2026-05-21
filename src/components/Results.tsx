@@ -110,30 +110,22 @@ const Results: React.FC<ResultsProps> = ({ scores, onReset }) => {
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
+      
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
+      
+      // Calculate ratio to fit on one page
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       
       const finalWidth = imgWidth * ratio;
       const finalHeight = imgHeight * ratio;
       
-      let heightLeft = finalHeight;
-      let position = 0;
+      // Center horizontally
+      const xOffset = (pdfWidth - finalWidth) / 2;
+      // Center vertically or start from top with small margin
+      const yOffset = Math.max(0, (pdfHeight - finalHeight) / 2);
 
-      pdf.setFontSize(10);
-      pdf.text(`Belbin Role Assessment - ${username}`, 10, 10);
-      
-      // Add first page
-      pdf.addImage(imgData, 'PNG', 0, 15, finalWidth, finalHeight);
-      heightLeft -= (pdfHeight - 15);
-
-      // Add subsequent pages if needed
-      while (heightLeft >= 0) {
-        position = heightLeft - finalHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, finalWidth, finalHeight);
-        heightLeft -= pdfHeight;
-      }
+      pdf.addImage(imgData, 'PNG', xOffset, yOffset, finalWidth, finalHeight);
 
       pdf.save(`Belbin_Report_${username.replace(/\s+/g, '_')}.pdf`);
     } catch (error) {
